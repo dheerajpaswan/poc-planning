@@ -75,7 +75,7 @@ export const GetData = (props) => {
         }));
         props.toGetData(data);
       });
-  }, []);
+    }, []);
 };
 
 export default data;

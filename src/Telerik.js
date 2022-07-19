@@ -22,7 +22,8 @@ import gridData, { customModelFields, GetData } from "./data.js";
 import axios from "axios";
 import moment from "moment";
 import { FormWithCustomEditor } from "./SchedulerForm.js";
-import NonScheduler, { entityToSet } from "./NonSchedulerCustomForm.js";
+import NonScheduler from "./NonSchedulerCustomForm.js";
+import { useState } from "react";
 //custom item to color appointments
 const CustomItem = (props) => {
   let time = 9;
@@ -37,11 +38,16 @@ const CustomItem = (props) => {
   );
 };
 
+//global variable to contain the event change and to send data.
+// export var entityToSet = {} 
+
+
 const Telerik = () => {
   const MyScheduler = React.createRef();
   const [data, setData] = React.useState([]);
   const [dragTitle, setDragTitle] = React.useState("");
   const [dragItem, setDragItem] = React.useState("");
+  const [dataChange,setDataChange] = useState({});
 
   // console.log(data);
   //to formate date like this format "2000-03-22 12:22:11"
@@ -54,6 +60,7 @@ const Telerik = () => {
     Math.floor(Math.random() * (max - min + 1)) + min;
 
   const handleDropItem = (e) => {
+    // console.log(e);
     let start = e.target.getAttribute("data-slot-start");
     let end = e.target.getAttribute("data-slot-end");
 
@@ -114,8 +121,10 @@ const Telerik = () => {
 
   const toGetData = (data) => {
     setData(data);
+    // setDataChange(dataChange)
   };
-
+  // console.log(dataChange);
+  
   const onSaveOrUpdate = (item) => {
     fetch("http://142.93.214.96:9090/data/Planner/", {
       method: "POST",
@@ -134,7 +143,7 @@ const Telerik = () => {
 
   //saving data from custom form
   // onSaveOrUpdate(entityToSet.entity);
-  console.log(entityToSet);
+  // console.log(entityToSet);
 
   const handleDataChange = React.useCallback(
     ({ created, updated, deleted }) => {
@@ -152,6 +161,7 @@ const Telerik = () => {
       );
 
       //TODO: condition to apply
+    
       console.log(created);
       console.log(updated);
       console.log(deleted);

@@ -14,6 +14,9 @@ import { Error, Label } from "@progress/kendo-react-labels";
 import { Popup } from "@progress/kendo-react-popup";
 import { Menu, MenuItem } from "@progress/kendo-react-layout";
 import { DateTimePicker } from "@progress/kendo-react-dateinputs";
+import { entityToSet } from "./Telerik";
+import { GetData } from "./data";
+import { GRID_PREVENT_SELECTION_ELEMENT } from "@progress/kendo-react-grid/dist/npm/constants";
 // import categories from "./categories.json";
 
 //min number validation functions for form
@@ -45,21 +48,20 @@ const EmailInput = (fieldRenderProps) => {
     </div>
   );
 };
-//global variable to contain the event change and to send data.
-export var entityToSet = {};
 
 const NonScheduler = (props) => {
+  const [dataChange,setDataChange] = useState({});
   //handle submit for data fetch of this custom form
   const handleSubmit = (event) => {
-    // console.log("harsh test");
-    // console.log(event);
-
     props.onClose();
-    entityToSet = {
-      entity: event,
-      formOnClose: props.onClose(),
-    };
+    
+    // setDataChange({
+    //   entity: event,
+    //   formOnClose: props.onClose,
+    // });
+// props.onSubmit(event);
     // console.log(entityToSet);
+    console.log(event);
   };
 
   console.log("NonScheduler");
@@ -210,7 +212,7 @@ const NonScheduler = (props) => {
                   style={{ marginTop: "5px" }}
                   className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base col-12"
                   onClick={() => {
-                    props.onCancel();
+                    props.onClose();
                   }}
                 >
                   Cancel
