@@ -17,7 +17,7 @@ import { guid } from "@progress/kendo-react-common";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 //tooltip
 import { Tooltip, Popover } from "@progress/kendo-react-tooltip";
-
+import {Error} from "@progress/kendo-react-labels"
 import gridData, { customModelFields, GetData } from "./data.js";
 import axios from "axios";
 import moment from "moment";
@@ -37,6 +37,18 @@ const CustomItem = (props) => {
     />
   );
 };
+
+  //try to get data from custom form by adding new prop
+  const CustomFormWithAdditionalProps = (fieldRenderProps) => {
+    const { validationMessage, visited, ...others } = fieldRenderProps;
+    return (
+      <div>
+        <NonScheduler {...others} getUpdatedData={'HERE'} />
+        {visited && validationMessage && <Error>{validationMessage}</Error>}
+      </div>
+    );
+  };
+
 
 //global variable to contain the event change and to send data.
 // export var entityToSet = {} 
@@ -144,7 +156,6 @@ const Telerik = () => {
   //saving data from custom form
   // onSaveOrUpdate(entityToSet.entity);
   // console.log(entityToSet);
-
   const handleDataChange = React.useCallback(
     ({ created, updated, deleted }) => {
       setData((old) =>
@@ -225,6 +236,8 @@ const Telerik = () => {
     };
     return React.cloneElement(tr, { ...trProps }, tr.props.children);
   };
+
+
   return (
     <div className="row">
       <div className="col-8">
@@ -233,7 +246,7 @@ const Telerik = () => {
           //---custom form for the scheduler using scheduler form
           // form={FormWithCustomEditor}
           //---direct binded form without using scheudler form component
-          form={NonScheduler}
+          form={CustomFormWithAdditionalProps}
           data={data}
           modelFields={customModelFields}
           onDataChange={handleDataChange}
