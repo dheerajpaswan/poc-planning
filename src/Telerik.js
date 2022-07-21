@@ -17,7 +17,7 @@ import { guid } from "@progress/kendo-react-common";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 //tooltip
 import { Tooltip, Popover } from "@progress/kendo-react-tooltip";
-import {Error} from "@progress/kendo-react-labels"
+import { Error } from "@progress/kendo-react-labels";
 import gridData, { customModelFields, GetData } from "./data.js";
 import axios from "axios";
 import moment from "moment";
@@ -38,39 +38,42 @@ const CustomItem = (props) => {
   );
 };
 
-  //try to get data from custom form by adding new prop
-  const CustomFormWithAdditionalProps = (fieldRenderProps) => {
-    const { validationMessage, visited, ...others } = fieldRenderProps;
-    return (
-      <div>
-        <NonScheduler {...others} getUpdatedData={'HERE'} />
-        {visited && validationMessage && <Error>{validationMessage}</Error>}
-      </div>
-    );
-  };
-
-
-//global variable to contain the event change and to send data.
-// export var entityToSet = {} 
-
+//to formate date like this format "2000-03-22 12:22:11"
+const datetimeFormat = (date) => {
+  let converted = moment(date).format("YYYY-MM-DD hh:mm:ss");
+  return converted;
+};
+//random number
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
 
 const Telerik = () => {
   const MyScheduler = React.createRef();
   const [data, setData] = React.useState([]);
   const [dragTitle, setDragTitle] = React.useState("");
   const [dragItem, setDragItem] = React.useState("");
-  const [dataChange,setDataChange] = useState({});
+  const [dataChange, setDataChange] = useState({ data: {}, close: "" });
 
   // console.log(data);
-  //to formate date like this format "2000-03-22 12:22:11"
-  const datetimeFormat = (date) => {
-    let converted = moment(date).format("YYYY-MM-DD hh:mm:ss");
-    return converted;
+
+  //to get the data of the draged items updated value
+  const toGetUpdatedData = (updatedData, onClose) => {
+    setDataChange({ data: updatedData, close: onClose });
+    setData([updatedData, ...data]); //to add updated data in list of data
+    // onSaveOrUpdate(updatedData);
   };
+  console.log(dataChange);
 
-  const randomInt = (min, max) =>
-    Math.floor(Math.random() * (max - min + 1)) + min;
-
+  //To get data from custom form by adding new prop
+  const CustomFormWithAdditionalProps = (fieldRenderProps) => {
+    const { validationMessage, visited, ...others } = fieldRenderProps;
+    return (
+      <div>
+        <NonScheduler {...others} getUpdatedData={toGetUpdatedData} />
+        {visited && validationMessage && <Error>{validationMessage}</Error>}
+      </div>
+    );
+  };
   const handleDropItem = (e) => {
     // console.log(e);
     let start = e.target.getAttribute("data-slot-start");
@@ -136,7 +139,7 @@ const Telerik = () => {
     // setDataChange(dataChange)
   };
   // console.log(dataChange);
-  
+
   const onSaveOrUpdate = (item) => {
     fetch("http://142.93.214.96:9090/data/Planner/", {
       method: "POST",
@@ -172,7 +175,7 @@ const Telerik = () => {
       );
 
       //TODO: condition to apply
-    
+
       console.log(created);
       console.log(updated);
       console.log(deleted);
@@ -236,7 +239,6 @@ const Telerik = () => {
     };
     return React.cloneElement(tr, { ...trProps }, tr.props.children);
   };
-
 
   return (
     <div className="row">

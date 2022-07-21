@@ -11,13 +11,9 @@ import {
 import { Input, NumericTextBox, Checkbox } from "@progress/kendo-react-inputs";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 import { Error, Label } from "@progress/kendo-react-labels";
-import { Popup } from "@progress/kendo-react-popup";
-import { Menu, MenuItem } from "@progress/kendo-react-layout";
+import { Popup } from "@progress/kendo-react-popup"; //yet to implement
+import { Menu, MenuItem } from "@progress/kendo-react-layout"; //yet to implement
 import { DateTimePicker } from "@progress/kendo-react-dateinputs";
-import { entityToSet } from "./Telerik";
-import { GetData } from "./data";
-import { GRID_PREVENT_SELECTION_ELEMENT } from "@progress/kendo-react-grid/dist/npm/constants";
-// import categories from "./categories.json";
 
 //min number validation functions for form
 const minValueValidator = (value) =>
@@ -50,18 +46,11 @@ const EmailInput = (fieldRenderProps) => {
 };
 
 const NonScheduler = (props) => {
-  const [dataChange,setDataChange] = useState({});
   //handle submit for data fetch of this custom form
   const handleSubmit = (event) => {
     props.onClose();
-    
-    // setDataChange({
-    //   entity: event,
-    //   formOnClose: props.onClose,
-    // });
-// props.onSubmit(event);
-    // console.log(entityToSet);
     console.log(event);
+    props.getUpdatedData(event, props.onClose);
   };
 
   console.log("NonScheduler");
